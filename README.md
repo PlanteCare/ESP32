@@ -47,7 +47,7 @@ La classe `MyMqtt` gère la connexion et la communication MQTT.
 Le fichier `main.cpp` contient le code principal qui configure et utilise les classes MyWifi et MyMqtt.
 
 **Configuration :**
-- `MQTT_SERVER` : "lyeshamrani.com"
+- `MQTT_SERVER` : "adresse_serveur"
 - `MQTT_PORT` : 1883
 - `WIFI_SSID` : "GIGACHAD"
 - `WIFI_PASSWORD` : "BigNoobs999"
