@@ -49,8 +49,8 @@ Le fichier `main.cpp` contient le code principal qui configure et utilise les cl
 **Configuration :**
 - `MQTT_SERVER` : "adresse_serveur"
 - `MQTT_PORT` : 1883
-- `WIFI_SSID` : "GIGACHAD"
-- `WIFI_PASSWORD` : "BigNoobs999"
+- `WIFI_SSID` : "SSID"
+- `WIFI_PASSWORD` : "PASSWORD"
 - `MQTT_TOPIC` : "plantecare/message"
 - `LOOP_DELAY` : 60000 ms (1 minute)
 
