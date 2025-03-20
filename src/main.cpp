@@ -1,25 +1,32 @@
 #include <Arduino.h>
 #include "MyMqtt.h"
-#include "MyWifi.h"
+#include <WiFi.h>
+#include <WiFiManager.h>
 
 
 #define SERIAL_SPEED 9600
-#define MQTT_SERVER "lyeshamrani.com"
-#define MQTT_PORT 1883
-#define WIFI_SSID "GIGACHAD"
-#define WIFI_PASSWORD "BigNoobs999"
+#define MQTT_SERVER "api.lyeshamrani.com"
+#define MQTT_PORT 8883
 #define MQTT_TOPIC "plantecare/message"
 #define LOOP_DELAY 60000
 
+#define WIFI_SSID "PlanteCare-AP"
+#define WIFI_PASS "PlanteCare"
+
+
 MyMqtt *myMqtt = nullptr;
-MyWifi *myWifi = nullptr;
+WiFiManager wifiManager;
 
 void setup() {
-  // put your setup code here, to run once:
   Serial.begin(SERIAL_SPEED);
-  myWifi = new MyWifi();
-  myWifi->init(WIFI_SSID, WIFI_PASSWORD);
-  myWifi->connect();
+  Serial.println("Booting...");
+  bool res = wifiManager.autoConnect(WIFI_SSID, WIFI_PASS);
+  if (!res) {
+    Serial.println("Échec de connexion au WiFi");
+    ESP.restart();
+  } else {
+    Serial.println("Connecté au WiFi");
+  }
   myMqtt = new MyMqtt();
   myMqtt->init(MQTT_SERVER, MQTT_PORT);
   myMqtt->connect();
