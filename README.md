@@ -12,9 +12,6 @@ ESP32/
 │   ├── MyMqtt/                 # Bibliothèque de gestion MQTT
 │   │   ├── MyMqtt.h           # Déclaration de la classe MQTT
 │   │   └── MyMqtt.cpp         # Implémentation de la classe MQTT
-│   └── MyWifi/                 # Bibliothèque de gestion WiFi
-│       ├── MyWifi.h           # Déclaration de la classe WiFi
-│       └── MyWifi.cpp         # Implémentation de la classe WiFi
 ├── platformio.ini              # Configuration PlatformIO
 └── src/                        # Code source principal
     └── main.cpp                # Point d'entrée du programme
@@ -22,15 +19,24 @@ ESP32/
 
 ## Composants Principaux
 
-### 1. Classe MyWifi (lib/MyWifi/)
+### 1. WiFiManager
 
-La classe `MyWifi` gère la connexion WiFi de l'ESP32.
+Le projet utilise la bibliothèque WiFiManager pour gérer la connexion WiFi de l'ESP32 de manière conviviale.
 
 **Fonctionnalités :**
-- Initialisation et connexion au réseau WiFi
-- Déconnexion du réseau WiFi
-- Vérification de l'état de la connexion
-- Récupération de l'adresse IP et MAC
+- Configuration WiFi via un portail captif sans coder les identifiants
+- Stockage automatique des paramètres de connexion en mémoire
+- Création d'un point d'accès temporaire lorsqu'aucune connexion n'est disponible
+- Prise en charge de la reconnexion automatique
+- Configuration possible via interface web (192.168.4.1)
+
+**Utilisation :**
+```cpp
+#include <WiFiManager.h>
+
+WiFiManager wifiManager;
+wifiManager.autoConnect("PlanteCare-AP", "password");
+```
 
 ### 2. Classe MyMqtt (lib/MyMqtt/)
 
@@ -44,21 +50,22 @@ La classe `MyMqtt` gère la connexion et la communication MQTT.
 
 ### 3. Programme Principal (src/main.cpp)
 
-Le fichier `main.cpp` contient le code principal qui configure et utilise les classes MyWifi et MyMqtt.
+Le fichier `main.cpp` contient le code principal qui configure WiFiManager et utilise la classe MyMqtt.
 
 **Configuration :**
-- `MQTT_SERVER` : "adresse_serveur"
-- `MQTT_PORT` : 1883
-- `WIFI_SSID` : "SSID"
-- `WIFI_PASSWORD` : "PASSWORD"
+- `MQTT_SERVER` : "api.lyeshamrani.com"
+- `MQTT_PORT` : 8883
 - `MQTT_TOPIC` : "plantecare/message"
 - `LOOP_DELAY` : 60000 ms (1 minute)
+- `AP_NAME` : "PlanteCare-AP" (nom du point d'accès WiFi)
+- `AP_PASSWORD` : "password" (mot de passe du point d'accès)
 
 **Fonctionnement :**
 1. Initialisation de la communication série
-2. Connexion au WiFi
+2. Configuration et connexion au WiFi via WiFiManager
 3. Connexion au serveur MQTT
 4. Envoi périodique du message "Hello from ESP32" sur le topic MQTT
+5. Vérification de l'état de la connexion WiFi à chaque boucle
 
 ## Configuration PlatformIO
 
@@ -71,6 +78,7 @@ board = esp32doit-devkit-v1
 framework = arduino
 lib_deps =
     knolleary/PubSubClient@^2.8
+    tzapu/WiFiManager@^2.0.17
 ```
 
 ## Auteur
