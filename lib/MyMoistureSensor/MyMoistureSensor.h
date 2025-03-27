@@ -18,15 +18,13 @@ public:
     MyMoistureSensor();
     ~MyMoistureSensor();
     bool init(int _pin, int _dryValue, int _wetValue);
-    String getMoisture();
+    int getMoisturePercent();
 
 private:
     int pin;
     int dryValue;
     int wetValue;
     int moistureValue;
-    int moisturePercent; // Correction de 'moiusturePercent' en 'moisturePercent'
-    int getMoisturePercent();
 };
 
 #endif

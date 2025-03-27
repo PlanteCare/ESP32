@@ -10,8 +10,10 @@
  */
 #include "MyMoistureSensor.h"
 
+/// @brief Constructeur de la classe MyMoistureSensor
 MyMoistureSensor::MyMoistureSensor() {}
 
+/// @brief Destructeur de la classe MyMoistureSensor
 MyMoistureSensor::~MyMoistureSensor() {}
 
 /**
@@ -33,19 +35,6 @@ bool MyMoistureSensor::init(int _pin, int _dryValue, int _wetValue) {
 }
 
 /**
- * Récupère l'humidité du sol
- *
- * @date Création 20/03/2025
- * @brief Récupération de l'humidité
- *
- * @return Humidité du sol
- */
-String MyMoistureSensor::getMoisture() {
-    moisturePercent = getMoisturePercent(); // Correction de 'moiusturePercent' en 'moisturePercent'
-    return String(moisturePercent) + "%"; // Correction de la concaténation
-}
-
-/**
  * Récupère le pourcentage d'humidité du sol
  *
  * @date Création 20/03/2025
@@ -55,7 +44,6 @@ String MyMoistureSensor::getMoisture() {
  */
 int MyMoistureSensor::getMoisturePercent() {
     moistureValue = analogRead(pin);
-    // Contraindre la valeur entre les valeurs de référence
     moistureValue = constrain(moistureValue, wetValue, dryValue);
     return map(moistureValue, dryValue, wetValue, 0, 100);
 }
