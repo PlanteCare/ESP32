@@ -5,6 +5,7 @@
 #include <WiFiManager.h>
 #include "MyOled.h"
 #include "MyLed.h"
+#include "MyMofset.h"
 
 
 #define SERIAL_SPEED 9600
@@ -31,18 +32,19 @@
 #define LED_GPIO 2
 #define BLINK_DELAY 500
 
+#define MOFSET_GPIO 23
+
 MyMqtt *myMqtt = NULL;
 MyMoistureSensor *myMoistureSensor = NULL;
 MyOled *myOled = NULL;
 WiFiManager wifiManager;
 MyLed *myLed = NULL;
+MyMofset *myMofset = NULL;
 
 
 void setup() {
   Serial.begin(SERIAL_SPEED);
   delay(SERIAL_DELAY);
-  myOled = new MyOled(&Wire, OLED_RESET, SCREEN_HEIGHT, SCREEN_WIDTH);
-
 }
 
 void loop() {
