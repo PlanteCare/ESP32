@@ -1,52 +1,16 @@
 #include <Arduino.h>
-#include "MyMqtt.h"
-#include "MyMoistureSensor.h"
-#include <WiFi.h>
-#include <WiFiManager.h>
-#include "MyOled.h"
-#include "MyLed.h"
-#include "MyMofset.h"
-
 
 #define SERIAL_SPEED 9600
-#define SERIAL_DELAY 300
-#define LOOP_DELAY 500
+#define SERIAL_DELAY 2000
+#define LOOP_DELAY 1000
 
-#define MQTT_SERVER "api.lyeshamrani.com"
-#define MQTT_PORT 8883
-#define MQTT_HUMIDITY_TOPIC "plantecare/humidity"
-
-
-#define MOISTURE_SENSOR_PIN 25
-#define MOISTURE_SENSOR_DRY_VALUE 3000
-#define MOISTURE_SENSOR_WET_VALUE 1000
-
-#define SCREEN_WIDTH 128 
-#define SCREEN_HEIGHT 64 
-#define OLED_RESET 4     
-#define SPLASH_TIME 1200 
-
-#define WIFI_SSID "PlanteCare-AP"
-#define WIFI_PASS "PlanteCare"
-
-#define LED_GPIO 2
-#define BLINK_DELAY 500
-
-#define MOFSET_GPIO 23
-
-MyMqtt *myMqtt = NULL;
-MyMoistureSensor *myMoistureSensor = NULL;
-MyOled *myOled = NULL;
-WiFiManager wifiManager;
-MyLed *myLed = NULL;
-MyMofset *myMofset = NULL;
-
-
-void setup() {
+void setup()
+{
   Serial.begin(SERIAL_SPEED);
   delay(SERIAL_DELAY);
 }
 
-void loop() {
+void loop()
+{
   delay(LOOP_DELAY);
 }

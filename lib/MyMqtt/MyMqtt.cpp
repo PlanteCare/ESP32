@@ -10,26 +10,35 @@
  */
 #include "MyMqtt.h"
 
-MyMqtt::MyMqtt() {}
+/**
+ * @brief Constructeur de la classe MyMqtt
+ * 
+ * @date Création 05/09/2024
+ * @brief Constructeur de la classe MyMqtt
+ * 
+ * @param _mqttServer Adresse du serveur mqtt
+ * @param _mqttPort Port du serveur mqtt
+ */
+MyMqtt::MyMqtt(const char* _mqttServer, int _mqttPort) {
+    mqttServer = _mqttServer;
+    mqttPort = _mqttPort;
+}
 
+/// @brief Destructeur de la classe MyMqtt
 MyMqtt::~MyMqtt() {}
 
 /**
  * init initialise de la classe MyMqtt
- * Initialise les paramètres de connexion
+ * Initialise de la connexion
  * 
  * @date Création 05/09/2024
  * @brief Initialisation de la connexion
  * 
- * @param _mqttServer Adresse du serveur mqtt
- * @param _mqttPort Port du serveur mqtt
- * 
  * @return true si l'initialisation est réussie
  */
-bool MyMqtt::init(const char* _mqttServer, int _mqttPort) {
-    mqttServer = _mqttServer;
-    mqttPort = _mqttPort;
-    client.setClient(espClient);
+bool MyMqtt::init() {
+    espClientSecure.setInsecure();
+    client.setClient(espClientSecure);
     client.setServer(mqttServer, mqttPort);
     return true;
 }

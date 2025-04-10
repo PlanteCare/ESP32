@@ -15,9 +15,9 @@
 class MyMoistureSensor
 {
 public:
-    MyMoistureSensor();
+    MyMoistureSensor(int _pin, int _dryValue, int _wetValue);
     ~MyMoistureSensor();
-    bool init(int _pin, int _dryValue, int _wetValue);
+    bool init();
     int getMoisturePercent();
 
 private:

@@ -15,9 +15,9 @@
 class MyWaterSensor
 {
     public:
-        MyWaterSensor();
+        MyWaterSensor(int _waterSensorPin, int _waterMaxValue, int _waterMinValue);
         ~MyWaterSensor();
-        bool init(int _waterSensorPin, int _waterMaxValue, int _waterMinValue);
+        bool init();
         int getWaterPercent();
     private:
         int waterSensorPin;

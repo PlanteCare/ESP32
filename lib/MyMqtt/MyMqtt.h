@@ -12,14 +12,14 @@
 #define MyMqtt_h
 
 #include <PubSubClient.h>
-#include <WiFiClient.h>
+#include <WiFiClientSecure.h>
 #include <WiFi.h>
 
 class MyMqtt {
 public:
-    MyMqtt();
+    MyMqtt(const char* _mqttServer, int _mqttPort);
     ~MyMqtt();
-    bool init(const char* _mqttServer, int _mqttPort);
+    bool init();
     bool connect();
     void disconnect();
     bool isConnected();
@@ -29,7 +29,7 @@ public:
 
 private:
     PubSubClient client;
-    WiFiClient espClient;
+    WiFiClientSecure espClientSecure; 
     String idClient;
     const char* mqttServer;
     int mqttPort;

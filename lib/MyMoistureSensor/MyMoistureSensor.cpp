@@ -10,26 +10,34 @@
  */
 #include "MyMoistureSensor.h"
 
-/// @brief Constructeur de la classe MyMoistureSensor
-MyMoistureSensor::MyMoistureSensor() {}
+/**
+ * @brief Constructeur de la classe MyMoistureSensor
+ *
+ * @date Création 20/03/2025
+ * @brief Constructeur de la classe MyMoistureSensor
+ *
+ * @param _pin Pin du capteur d'humidité
+ * @param _dryValue Valeur de l'humidité sèche
+ * @param _wetValue Valeur de l'humidité humide
+ */
+MyMoistureSensor::MyMoistureSensor(int _pin, int _dryValue, int _wetValue) {
+    pin = _pin;
+    dryValue = _dryValue;
+    wetValue = _wetValue;
+}
 
 /// @brief Destructeur de la classe MyMoistureSensor
 MyMoistureSensor::~MyMoistureSensor() {}
 
 /**
- * Initialise les paramètres du capteur d'humidité
+ * Initialise le capteur d'humidité
  *
  * @date Création 20/03/2025
  * @brief Initialisation du capteur d'humidité
  *
- * @param _pin Pin de lecture du capteur
- * @param _dryValue Valeur de référence pour le sol sec
- * @param _wetValue Valeur de référence pour le sol humide
+ * @return true si l'initialisation est réussie
  */
-bool MyMoistureSensor::init(int _pin, int _dryValue, int _wetValue) {
-    pin = _pin;
-    dryValue = _dryValue;
-    wetValue = _wetValue;
+bool MyMoistureSensor::init() {
     pinMode(pin, INPUT);
     return true;
 }

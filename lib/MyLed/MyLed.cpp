@@ -11,24 +11,34 @@
 #include "MyLed.h"
 
 
-/// @brief Constructeur de la classe MyLed
-MyLed::MyLed() {}
+/**
+ * @brief Constructeur de la classe MyLed
+ * 
+ * @date Création 27/03/2025
+ * @brief Constructeur de la classe MyLed
+ * 
+ * @param _ledPin Pin de la led
+ * @param _delay Délai de clignotement
+ */
+MyLed::MyLed(int _ledPin, int _delay) {
+    ledPin = _ledPin;
+    blinkDelay = _delay;
+}
 
 /// @brief Destructeur de la classe MyLed
 MyLed::~MyLed() {}
 
 /**
- * Initialise les paramètres de la led
+ * Initialise la led
  * 
  * @date Création 27/03/2025
  * @brief Initialisation de la led
  * 
- * @param _ledPin Pin de la led
+ * @return true si l'initialisation est réussie
  */
-bool MyLed::init(int _ledPin) {
-    ledPin = _ledPin;
+bool MyLed::init() {
     pinMode(ledPin, OUTPUT);
-    off();
+    off(); 
     return true;
 }
 
@@ -57,11 +67,8 @@ void MyLed::off() {
  * 
  * @date Création 27/03/2025
  * @brief Clignotement de la led
- * 
- * @param _delay Délai de clignotement
  */
-void MyLed::blink(int _delay) {
-    blinkDelay= _delay;
+void MyLed::blink() {
     digitalWrite(ledPin, LOW);
     delay(blinkDelay);
     digitalWrite(ledPin, HIGH);

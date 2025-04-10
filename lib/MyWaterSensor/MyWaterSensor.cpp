@@ -10,26 +10,34 @@
  */
 #include "MyWaterSensor.h"
 
-/// @brief Constructeur de la classe MyWaterSensor
-MyWaterSensor::MyWaterSensor() {}
+/**
+ * @brief Constructeur de la classe MyWaterSensor
+ * 
+ * @date Création 20/03/2025
+ * @brief Constructeur de la classe MyWaterSensor
+ * 
+ * @param _waterSensorPin Pin du capteur d'humidité
+ * @param _waterMaxValue Valeur maximale de l'humidité
+ * @param _waterMinValue Valeur minimale de l'humidité
+ */
+MyWaterSensor::MyWaterSensor(int _waterSensorPin, int _waterMaxValue, int _waterMinValue) {
+    waterSensorPin = _waterSensorPin;
+    waterMaxValue = _waterMaxValue;
+    waterMinValue = _waterMinValue;
+}
 
 /// @brief Destructeur de la classe MyWaterSensor
 MyWaterSensor::~MyWaterSensor() {}
 
 /**
- * Initialise les paramètres du capteur d'humidité
+ * Initialise du capteur d'humidité
  * 
  * @date Création 20/03/2025
  * @brief Initialisation du capteur d'humidité
  * 
- * @param _waterSensorPin Pin de lecture du capteur
- * @param _waterMaxValue Valeur de référence pour le niveau d'eau maximum
- * @param _waterMinValue Valeur de référence pour le niveau d'eau minimum
+ * @return true si l'initialisation est réussie
  */
-bool MyWaterSensor::init(int _waterSensorPin, int _waterMaxValue, int _waterMinValue) {
-    waterSensorPin = _waterSensorPin;
-    waterMaxValue = _waterMaxValue;
-    waterMinValue = _waterMinValue;
+bool MyWaterSensor::init() {
     pinMode(waterSensorPin, INPUT);
     return true;
 }

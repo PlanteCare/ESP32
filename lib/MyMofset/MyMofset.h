@@ -15,9 +15,9 @@ class MyMofset
 private:
     int mofsetPin;
 public:
-    MyMofset();
+    MyMofset(int _mofsetPin);
     ~MyMofset();
-    bool init(int _mofsetPin);
+    bool init();
     void on();
     void off();
 };

@@ -15,12 +15,12 @@
 class MyLed
 {
 public:
-    MyLed();
+    MyLed(int _ledPin, int _delay);
     ~MyLed();
-    bool init(int _ledPin);
+    bool init();
     void on();
     void off();
-    void blink(int _delay);
+    void blink();
 
     private:
     int ledPin;
