@@ -49,7 +49,7 @@ bool MyLed::init() {
  * @brief Allumage de la led
  */
 void MyLed::on() {
-    digitalWrite(ledPin, LOW);
+    digitalWrite(ledPin, HIGH);
 }
 
 /**
@@ -59,7 +59,7 @@ void MyLed::on() {
  * @brief Extinction de la led
  */
 void MyLed::off() {
-    digitalWrite(ledPin, HIGH);
+    digitalWrite(ledPin, LOW);
 }
 
 /**
@@ -69,8 +69,7 @@ void MyLed::off() {
  * @brief Clignotement de la led
  */
 void MyLed::blink() {
-    digitalWrite(ledPin, LOW);
+    on();
     delay(blinkDelay);
-    digitalWrite(ledPin, HIGH);
-    delay(blinkDelay);
+    off();
 }
