@@ -39,6 +39,9 @@ MyMoistureSensor::~MyMoistureSensor() {}
  */
 bool MyMoistureSensor::init() {
     pinMode(pin, INPUT);
+    if (analogRead(pin) <= 0 || analogRead(pin) >= 4095) {
+        return false;
+    }
     return true;
 }
 

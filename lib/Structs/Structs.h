@@ -32,6 +32,8 @@ struct planteCareConfig {
 
     /*-----------OTHER-----------*/
     int setupDelay;
+    int loopDelay;
+    int mosfetDelay;
 };
 
 #endif

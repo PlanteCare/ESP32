@@ -16,6 +16,7 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <WiFiManager.h>
+#include <ArduinoJson.h>
 #include "MyMqtt.h"
 #include "MyMoistureSensor.h"
 #include "MyWaterSensor.h"
@@ -50,11 +51,21 @@ private:
     bool setupMofset();
     bool setupMoistureSensor();
     bool setupWaterSensor();
+    void startMosfet();
+
+    /*-----------VARIABLES-----------*/
+    int initialWaterValue = 0;
+    int initialMoistureValue = 0;
+    int waterValue = 0;
+    int moistureValue = 0;
+    StaticJsonDocument<200> statusDoc;
+    char jsonBuffer[256];
 
 public:
     MyPlanteCare(planteCareConfig *_config);
     ~MyPlanteCare();
     bool init();
+    void getValues();
 };
 
-#endif
+#endif 

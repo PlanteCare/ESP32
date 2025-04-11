@@ -39,6 +39,9 @@ MyWaterSensor::~MyWaterSensor() {}
  */
 bool MyWaterSensor::init() {
     pinMode(waterSensorPin, INPUT);
+    if (analogRead(waterSensorPin) < 0 || analogRead(waterSensorPin) >= 4095) {
+        return false;
+    }
     return true;
 }
 

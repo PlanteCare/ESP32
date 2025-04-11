@@ -2,14 +2,14 @@
 #include "MyPlanteCare.h"
 
 #define SERIAL_SPEED 9600
-#define SERIAL_DELAY 2000
-#define LOOP_DELAY 1000
+#define SERIAL_DELAY 1000
+#define LOOP_DELAY 500
 
 // Configuration pour le test
 #define GREEN_LED_PIN 16
 #define WHITE_LED_PIN 17
 #define RED_LED_PIN 18
-#define LEDS_BLINK_DELAY 500
+#define LEDS_BLINK_DELAY 300
 
 // OLED
 #define SCREEN_WIDTH 128
@@ -18,21 +18,32 @@
 #define SPLASH_TIME 1200
 
 // WiFi
-#define WIFI_SSID "PlanteCare-AP"
-#define WIFI_PASS "PlanteCare"
+#define WIFI_SSID "PlanteCare"
+#define WIFI_PASS "Secure1234"
 #define WIFI_TIMEOUT 180
 #define WIFI_PORTAL_TIMEOUT 120
 
 // MQTT
 #define MQTT_SERVER "api.lyeshamrani.com"
 #define MQTT_PORT 8883
-#define MQTT_TOPIC "planteCare/error"
 
 // MOFSET
 #define MOFSET_PIN 2
 
+// Capteur d'eau
+#define WATER_SENSOR_PIN 36
+#define WATER_MAX_VALUE 1500
+#define WATER_MIN_VALUE 0
+
+// Capteur d'humidité
+#define MOISTURE_SENSOR_PIN 35
+#define MOISTURE_MAX_VALUE 3000
+#define MOISTURE_MIN_VALUE 1000
+
 // COMPONENTS SETUP DELAY
-#define SETUP_DELAY 2000
+#define SETUP_DELAY 1000
+#define LOOP_DELAY_VALUE 2000
+#define MOSFET_DELAY 5000
 
 // Déclaration du contrôleur global
 MyPlanteCare *planteCare = nullptr;
@@ -62,8 +73,15 @@ void setup()
   config.wifiPortalTimeout = WIFI_PORTAL_TIMEOUT;
   config.mqttServer = MQTT_SERVER;
   config.mqttPort = MQTT_PORT;
-  config.mqttTopic = MQTT_TOPIC;
   config.mofsetPin = MOFSET_PIN;
+  config.waterSensorPin = WATER_SENSOR_PIN;
+  config.waterMaxValue = WATER_MAX_VALUE;
+  config.waterMinValue = WATER_MIN_VALUE;
+  config.moistureSensorPin = MOISTURE_SENSOR_PIN;
+  config.moistureWetValue = MOISTURE_MAX_VALUE;
+  config.moistureDryValue = MOISTURE_MIN_VALUE;
+  config.loopDelay = LOOP_DELAY_VALUE;
+  config.mosfetDelay = MOSFET_DELAY;
   
   // Création et initialisation du contrôleur
   planteCare = new MyPlanteCare(&config);
@@ -77,5 +95,6 @@ void setup()
 
 void loop()
 {
+  planteCare->getValues();
   delay(LOOP_DELAY);
 }
