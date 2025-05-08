@@ -28,7 +28,7 @@
 #define MQTT_PORT 8883
 
 // MOFSET
-#define MOFSET_PIN 2
+#define MOFSET_PIN 23
 
 // Capteur d'eau
 #define WATER_SENSOR_PIN 36

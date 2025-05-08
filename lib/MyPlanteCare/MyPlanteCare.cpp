@@ -13,6 +13,15 @@
 
 MyPlanteCare::MyPlanteCare(planteCareConfig *_config)
 {
+    myMqtt = nullptr;
+    myOled = nullptr;
+    myMofset = nullptr;
+    myMoistureSensor = nullptr;
+    myWaterSensor = nullptr;
+    redLed = nullptr;
+    greenLed = nullptr;
+    witheLed = nullptr;
+    
     if (_config != nullptr)
     {
         this->config = *_config;
@@ -21,82 +30,95 @@ MyPlanteCare::MyPlanteCare(planteCareConfig *_config)
 
 MyPlanteCare::~MyPlanteCare()
 {
-    delete myMqtt;
-    delete myOled;
-    delete myMofset;
-    delete myMoistureSensor;
-    delete myWaterSensor;
-    delete redLed;
-    delete greenLed;
-    delete witheLed;
+    if (myMqtt != nullptr) delete myMqtt;
+    if (myOled != nullptr) delete myOled;
+    if (myMofset != nullptr) delete myMofset;
+    if (myMoistureSensor != nullptr) delete myMoistureSensor;
+    if (myWaterSensor != nullptr) delete myWaterSensor;
+    if (redLed != nullptr) delete redLed;
+    if (greenLed != nullptr) delete greenLed;
+    if (witheLed != nullptr) delete witheLed;
 }
 
 bool MyPlanteCare::init()
 {
-    if (!setupLeds() || redLed == nullptr || greenLed == nullptr || witheLed == nullptr)
+    if (!setupLeds())
     {
         Serial.println("Erreur lors de la configuration des LEDs.");
         return false;
     }
-    witheLed->on();
-    if (!setupOled() || myOled == nullptr)
+
+    if (witheLed != nullptr) witheLed->on();
+    
+    if (!setupOled())
     {
         Serial.println("Erreur lors de la configuration de l'OLED.");
-        redLed->on();
+        if (redLed != nullptr) redLed->on();
         return false;
     }
-    greenLed->blink();
-    if (!setupWifi())
+    
+    if (greenLed != nullptr) greenLed->blink();
+    
+    bool wifiConnected = setupWifi();
+    if (!wifiConnected)
     {
         Serial.println("Erreur lors de la configuration du WiFi.");
-        redLed->on();
-        return false;
+        if (redLed != nullptr) redLed->on();
     }
-    greenLed->blink();
-    if (!setupMqtt() || myMqtt == nullptr)
+    
+    if (greenLed != nullptr) greenLed->blink();
+    
+    bool mqttConnected = false;
+    if (wifiConnected)
     {
-        Serial.println("Erreur lors de la configuration du MQTT.");
-        redLed->on();
-        return false;
+        mqttConnected = setupMqtt();
+        if (!mqttConnected)
+        {
+            Serial.println("Erreur lors de la configuration du MQTT.");
+        }
     }
-    greenLed->blink();
-    if (!setupMofset() || myMofset == nullptr)
+    
+    if (greenLed != nullptr) greenLed->blink();
+    
+    if (!setupMofset())
     {
         Serial.println("Erreur lors de la configuration du Mofset.");
-        redLed->on();
+        if (redLed != nullptr) redLed->on();
         return false;
     }
-    greenLed->blink();
-    if (!setupMoistureSensor() || myMoistureSensor == nullptr)
+    
+    if (greenLed != nullptr) greenLed->blink();
+    
+    if (!setupMoistureSensor())
     {
         Serial.println("Erreur lors de la configuration du capteur d'humidité.");
-        redLed->on();
+        if (redLed != nullptr) redLed->on();
         return false;
     }
-    greenLed->blink();
-    if (!setupWaterSensor() || myWaterSensor == nullptr)
+    
+    if (greenLed != nullptr) greenLed->blink();
+    
+    if (!setupWaterSensor())
     {
         Serial.println("Erreur lors de la configuration du capteur d'eau.");
-        redLed->on();
+        if (redLed != nullptr) redLed->on();
         return false;
     }
-    greenLed->blink();
+    
+    if (greenLed != nullptr) greenLed->blink();
 
     statusDoc["status"] = "OK";
     statusDoc["moisture"] = "OK";
     statusDoc["water"] = "OK";
-    statusDoc["wifi"] = "OK";
-    statusDoc["mqtt"] = "OK";
-    statusDoc["mofset"] = "OK";
-    statusDoc["leds"] = "OK";
-    statusDoc["oled"] = "OK";
 
-    serializeJson(statusDoc, jsonBuffer);
-
-    myMqtt->publish("plantecare/status", jsonBuffer);
+    if (mqttConnected && myMqtt != nullptr)
+    {
+        serializeJson(statusDoc, jsonBuffer);
+        myMqtt->publish("plantecare/status", jsonBuffer);
+    }
     
-    witheLed->off();
-    greenLed->on();
+    if (witheLed != nullptr) witheLed->off();
+    if (greenLed != nullptr) greenLed->on();
 
     return true;
 }
@@ -104,24 +126,38 @@ bool MyPlanteCare::init()
 bool MyPlanteCare::setupLeds()
 {
     redLed = new MyLed(config.redLedPin, config.ledsBlinkDelay);
-    greenLed = new MyLed(config.greenLedPin, config.ledsBlinkDelay);
-    witheLed = new MyLed(config.witheLedPin, config.ledsBlinkDelay);
-
     if (!redLed->init())
     {
         Serial.println("Erreur lors de la configuration de la LED rouge.");
+        delete redLed;
+        redLed = nullptr;
         return false;
     }
+    
+    greenLed = new MyLed(config.greenLedPin, config.ledsBlinkDelay);
     if (!greenLed->init())
     {
         Serial.println("Erreur lors de la configuration de la LED verte.");
+        delete redLed;
+        redLed = nullptr;
+        delete greenLed;
+        greenLed = nullptr;
         return false;
     }
+    
+    witheLed = new MyLed(config.witheLedPin, config.ledsBlinkDelay);
     if (!witheLed->init())
     {
         Serial.println("Erreur lors de la configuration de la LED blanche.");
+        delete redLed;
+        redLed = nullptr;
+        delete greenLed;
+        greenLed = nullptr;
+        delete witheLed;
+        witheLed = nullptr;
         return false;
     }
+    
     redLed->blink();
     witheLed->blink();
     greenLed->blink();
@@ -269,7 +305,6 @@ bool MyPlanteCare::setupMofset()
         Serial.println("Erreur lors de la configuration du Mofset.");
         myOled->clearDisplay();
         
-        // Amélioration de l'affichage d'erreur
         myOled->drawRect(0, 0, 128, 12, SSD1306_WHITE);
         myOled->fillRect(0, 0, 128, 12, SSD1306_WHITE);
         myOled->setTextColor(SSD1306_BLACK);
@@ -284,11 +319,6 @@ bool MyPlanteCare::setupMofset()
         
         return false;
     }
-    
-    // Test du Mofset
-    myMofset->on();
-    delay(500);
-    myMofset->off();
     
     myOled->clearDisplay();
 
@@ -423,6 +453,12 @@ bool MyPlanteCare::setupWaterSensor()
 
 void MyPlanteCare::getValues()
 {
+    if (myMoistureSensor == nullptr || myWaterSensor == nullptr || myOled == nullptr || myMofset == nullptr)
+    {
+        Serial.println("Erreur: Capteurs non initialisés");
+        return;
+    }
+
     int moistureValue = myMoistureSensor->getMoisturePercent();
     int waterValue = myWaterSensor->getWaterPercent();
 
@@ -445,33 +481,33 @@ void MyPlanteCare::getValues()
     sprintf(waterStr, "%d%%", waterValue);
     myOled->printIt(80, 35, waterStr, false, 0);
 
-    statusDoc["moisture"] = moistureValue;
-    statusDoc["water"] = waterValue;
-
-    serializeJson(statusDoc, jsonBuffer);
-
-    myMqtt->publish("plantecare/values", jsonBuffer);
-
-    myOled->display();
-
-    delay(config.loopDelay);
-}
-
-void MyPlanteCare::startMosfet()
-{
-    if (moistureValue < 20)
+    if (moistureValue < 20 && waterValue > 10)
     {
+        myOled->printIt(5, 50, "Arrosage en cours...", false, 0);
         myMofset->on();
         delay(config.mosfetDelay);
         myMofset->off();
     }
-    else if (moistureValue >= 80)
+    else if (moistureValue < 20 && waterValue <= 10)
     {
-        myMofset->off();
+        myOled->printIt(5, 50, "Niveau eau trop bas!", false, 0);
     }
     else
     {
-        myMofset->off();
+        myOled->printIt(5, 50, "Humidite adequate", false, 0);
     }
+    if (myMqtt != nullptr)
+    {
+        statusDoc["moisture"] = moistureValue;
+        statusDoc["water"] = waterValue;
+
+        serializeJson(statusDoc, jsonBuffer);
+
+        myMqtt->publish("plantecare/values", jsonBuffer);
+    }
+
+    myOled->display();
+
+    delay(config.loopDelay);
 }
 
