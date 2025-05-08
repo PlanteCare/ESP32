@@ -19,11 +19,13 @@ class MyWaterSensor
         ~MyWaterSensor();
         bool init();
         int getWaterPercent();
+        bool isWorking(); 
     private:
         int waterSensorPin;
         int waterMaxValue;
         int waterMinValue;
         int waterValue;
+        bool sensorOk = false;
 };
 
 #endif

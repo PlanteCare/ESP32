@@ -107,9 +107,9 @@ bool MyPlanteCare::init()
     
     if (greenLed != nullptr) greenLed->blink();
 
-    statusDoc["status"] = "OK";
-    statusDoc["moisture"] = "OK";
-    statusDoc["water"] = "OK";
+    statusDoc["esp"] = "1";
+    statusDoc["moisture"] = "1";
+    statusDoc["water"] = "1";
 
     if (mqttConnected && myMqtt != nullptr)
     {
@@ -510,4 +510,23 @@ void MyPlanteCare::getValues()
 
     delay(config.loopDelay);
 }
+
+void MyPlanteCare::checkHealthStatus() {
+    String macAddress = WiFi.macAddress();
+    
+    StaticJsonDocument<200> statusDoc;
+    JsonObject esp_status = statusDoc.createNestedObject(macAddress);
+    
+    bool moistureSensorOk = (myMoistureSensor != nullptr && myMoistureSensor->isWorking());
+    bool waterSensorOk = (myWaterSensor != nullptr && myWaterSensor->isWorking());
+
+    esp_status["moisture_sensor"] = moistureSensorOk ? 1 : 0;
+    esp_status["water_sensor"] = waterSensorOk ? 1 : 0;
+    esp_status["esp"] = (moistureSensorOk && waterSensorOk) ? 1 : 0;
+
+    String jsonString;
+    serializeJson(statusDoc, jsonString);
+    
+    myMqtt->publish(config.mqttStatusTopic, jsonString.c_str());
+  }
 

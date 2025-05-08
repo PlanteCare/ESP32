@@ -26,6 +26,7 @@
 // MQTT
 #define MQTT_SERVER "api.lyeshamrani.com"
 #define MQTT_PORT 8883
+#define MQTT_STATUS_TOPIC "plantecare/status"
 
 // MOFSET
 #define MOFSET_PIN 23
@@ -47,6 +48,10 @@
 
 // Déclaration du contrôleur global
 MyPlanteCare *planteCare = nullptr;
+
+// Déclaration des variables
+int lastSystemCheck = 0;
+int checkInterval = 1000800; 
 
 void setup()
 {
@@ -73,6 +78,7 @@ void setup()
   config.wifiPortalTimeout = WIFI_PORTAL_TIMEOUT;
   config.mqttServer = MQTT_SERVER;
   config.mqttPort = MQTT_PORT;
+  config.mqttStatusTopic = MQTT_STATUS_TOPIC;
   config.mofsetPin = MOFSET_PIN;
   config.waterSensorPin = WATER_SENSOR_PIN;
   config.waterMaxValue = WATER_MAX_VALUE;
@@ -96,5 +102,9 @@ void setup()
 void loop()
 {
   planteCare->getValues();
+  if (millis() - lastSystemCheck > checkInterval) {
+    planteCare->checkHealthStatus();
+    lastSystemCheck = millis();
+  }
   delay(LOOP_DELAY);
 }

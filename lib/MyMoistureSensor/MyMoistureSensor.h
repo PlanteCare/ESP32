@@ -19,12 +19,14 @@ public:
     ~MyMoistureSensor();
     bool init();
     int getMoisturePercent();
+    bool isWorking();
 
 private:
     int pin;
     int dryValue;
     int wetValue;
     int moistureValue;
+    bool sensorOk = false;
 };
 
 #endif

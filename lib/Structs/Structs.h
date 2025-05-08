@@ -23,7 +23,7 @@ struct planteCareConfig {
     /*-----------MQTT-----------*/
     const char* mqttServer;
     int mqttPort;
-    const char* mqttTopic;
+    const char* mqttStatusTopic;
     /*-----------OLED-----------*/
     int oledWidth;
     int oledHeight;

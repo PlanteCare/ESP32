@@ -42,7 +42,8 @@ bool MyMoistureSensor::init() {
     if (analogRead(pin) <= 0 || analogRead(pin) >= 4095) {
         return false;
     }
-    return true;
+    sensorOk = true;
+    return true;  
 }
 
 /**
@@ -57,4 +58,16 @@ int MyMoistureSensor::getMoisturePercent() {
     moistureValue = analogRead(pin);
     moistureValue = constrain(moistureValue, wetValue, dryValue);
     return map(moistureValue, dryValue, wetValue, 0, 100);
+}
+
+/**
+ * Vérifie si le capteur d'humidité fonctionne correctement
+ *
+ * @date Création 07/05/2025
+ * @brief Vérification du fonctionnement du capteur d'humidité
+ *
+ * @return true si le capteur fonctionne correctement, false sinon
+ */
+bool MyMoistureSensor::isWorking() {
+    return sensorOk;
 }

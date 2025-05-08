@@ -39,9 +39,10 @@ MyWaterSensor::~MyWaterSensor() {}
  */
 bool MyWaterSensor::init() {
     pinMode(waterSensorPin, INPUT);
-    if (analogRead(waterSensorPin) < 0 || analogRead(waterSensorPin) >= 4095) {
+    if (analogRead(waterSensorPin) <= 0 || analogRead(waterSensorPin) >= 4095) {
         return false;
     }
+    sensorOk = true;
     return true;
 }
 
@@ -57,4 +58,16 @@ int MyWaterSensor::getWaterPercent() {
     waterValue = analogRead(waterSensorPin);
     waterValue = constrain(waterValue, waterMinValue, waterMaxValue);
     return map(waterValue, waterMinValue, waterMaxValue, 0, 100);
+}
+
+/**
+ * Vérifie si le capteur d'humidité fonctionne
+ * 
+ * @date Création 07/05/2025
+ * @brief Vérification du fonctionnement du capteur d'humidité
+ * 
+ * @return true si le capteur fonctionne, false sinon
+ */
+bool MyWaterSensor::isWorking() {
+    return sensorOk;
 }

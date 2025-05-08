@@ -66,6 +66,7 @@ public:
     ~MyPlanteCare();
     bool init();
     void getValues();
+    void checkHealthStatus();
 };
 
 #endif 
