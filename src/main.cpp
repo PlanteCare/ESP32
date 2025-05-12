@@ -38,20 +38,20 @@
 
 // Capteur d'humidité
 #define MOISTURE_SENSOR_PIN 35
-#define MOISTURE_MAX_VALUE 3000
+#define MOISTURE_MAX_VALUE 3500
 #define MOISTURE_MIN_VALUE 1000
 
 // COMPONENTS SETUP DELAY
 #define SETUP_DELAY 1000
-#define LOOP_DELAY_VALUE 2000
-#define MOSFET_DELAY 5000
+#define LOOP_DELAY_VALUE 5000
+#define MOSFET_DELAY 3500
 
 // Déclaration du contrôleur global
 MyPlanteCare *planteCare = nullptr;
 
 // Déclaration des variables
 int lastSystemCheck = 0;
-int checkInterval = 1000800; 
+int checkInterval = 1300000;
 
 void setup()
 {
@@ -97,6 +97,7 @@ void setup()
   } else {
     Serial.println("PlanteCare initialisé avec succès!");
   }
+  planteCare->checkHealthStatus();
 }
 
 void loop()
