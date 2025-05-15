@@ -27,6 +27,7 @@
 #define MQTT_SERVER "api.lyeshamrani.com"
 #define MQTT_PORT 8883
 #define MQTT_STATUS_TOPIC "plantecare/status"
+#define MQTT_VALUES_TOPIC "plantecare/values"
 
 // MOFSET
 #define MOFSET_PIN 23
@@ -79,6 +80,7 @@ void setup()
   config.mqttServer = MQTT_SERVER;
   config.mqttPort = MQTT_PORT;
   config.mqttStatusTopic = MQTT_STATUS_TOPIC;
+  config.mqttValuesTopic = MQTT_VALUES_TOPIC;
   config.mofsetPin = MOFSET_PIN;
   config.waterSensorPin = WATER_SENSOR_PIN;
   config.waterMaxValue = WATER_MAX_VALUE;
